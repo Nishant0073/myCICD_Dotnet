@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: 'Azure Pipelines'
+  name: 'Default'   # Change if your pool name is different
 
 variables:
   buildConfiguration: 'Release'
@@ -38,6 +38,8 @@ steps:
     zipAfterPublish: false
 
 - powershell: |
+    Import-Module WebAdministration
+
     Write-Host "Stopping IIS Website..."
     Stop-WebSite -Name "myTestApp"
 
@@ -55,8 +57,10 @@ steps:
     OverWrite: true
 
 - powershell: |
+    Import-Module WebAdministration
+
     Write-Host "Starting App Pool..."
-    Start-WebAppPool -Name "myTestAppPool"
+    Start-WebAppPool -Name "DefaultAppPool"
 
     Write-Host "Starting Website..."
     Start-WebSite -Name "myTestApp"
