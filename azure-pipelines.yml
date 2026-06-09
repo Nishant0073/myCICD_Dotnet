@@ -1,29 +1,63 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
-- task: IISWebAppManagementOnMachineGroup@0
-  inputs:
-    EnableIIS: true
-    IISDeploymentType: 'IISWebsite'
-    ActionIISWebsite: 'CreateOrUpdateWebsite'
-    WebsiteName: 'myTestApp'
-    WebsitePhysicalPath: 'C:\Users\nishant\Desktop\publich'
-    WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
-- task: DotNetCoreCLI@2
-  inputs:
-    azureSubscription: 'Azure subscription 1(b1203fbf-0853-42e0-b314-a904d487b23b)'
-    command: 'build'
-    projects: '.'
+
+pool:
+  name: 'Default'
+
+variables:
+  buildConfiguration: 'Release'
+  publishFolder: '$(Build.ArtifactStagingDirectory)\publish'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: UseDotNet@2
+  displayName: 'Install .NET 8 SDK'
+  inputs:
+    packageType: sdk
+    version: '8.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: publish
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output "$(publishFolder)"'
+    zipAfterPublish: false
+
+- powershell: |
+    Write-Host "Stopping IIS Website..."
+    Stop-WebSite -Name "myTestApp"
+
+    Write-Host "Stopping App Pool..."
+    Stop-WebAppPool -Name "myTestAppPool"
+  displayName: 'Stop IIS'
+
+- task: CopyFiles@2
+  displayName: 'Deploy to IIS Folder'
+  inputs:
+    SourceFolder: '$(publishFolder)'
+    Contents: '**'
+    TargetFolder: 'C:\inetpub\myTestApp'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- powershell: |
+    Write-Host "Starting App Pool..."
+    Start-WebAppPool -Name "myTestAppPool"
+
+    Write-Host "Starting Website..."
+    Start-WebSite -Name "myTestApp"
+  displayName: 'Start IIS'
