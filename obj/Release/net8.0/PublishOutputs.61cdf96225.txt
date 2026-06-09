@@ -1,0 +1,12 @@
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/MyTestProject
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/appsettings.Development.json
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/appsettings.json
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/MyTestProject.dll
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/MyTestProject.deps.json
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/MyTestProject.runtimeconfig.json
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/MyTestProject.pdb
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/Microsoft.AspNetCore.OpenApi.dll
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/Microsoft.OpenApi.dll
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.Swagger.dll
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/nishant/Projects/MyTestProject/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerUI.dll
